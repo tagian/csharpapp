@@ -15,10 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Configuration\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\CSharpApp.Application\CSharpApp.Application.csproj" />
       <ProjectReference Include="..\CSharpApp.Core\CSharpApp.Core.csproj" />
     </ItemGroup>
