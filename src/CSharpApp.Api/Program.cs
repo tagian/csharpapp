@@ -12,6 +12,7 @@ builder.Services.AddSerilog(Log.Logger);
 builder.Services.AddOpenApi("v1");
 builder.Services.AddDefaultConfiguration(builder.Configuration);
 builder.Services.AddHttpConfiguration();
+builder.Services.AddExceptionHandler<UpstreamExceptionHandler>();
 builder.Services.AddProblemDetails();
 builder.Services.AddApiVersioning().AddApiExplorer(options =>
 {
@@ -27,8 +28,6 @@ builder.Services.AddScoped<GetCategoriesQueryHandler>();
 builder.Services.AddScoped<GetCategoryByIdQueryHandler>();
 builder.Services.AddScoped<CreateCategoryCommandHandler>();
 
-
-
 var app = builder.Build();
 
 app.UseSerilogRequestLogging(options =>
@@ -36,6 +35,8 @@ app.UseSerilogRequestLogging(options =>
     options.MessageTemplate =
         "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0} ms";
 });
+
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {

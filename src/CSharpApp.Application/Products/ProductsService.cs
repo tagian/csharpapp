@@ -19,7 +19,15 @@ public class ProductsService : IProductsService
     {
         var client = _factory.CreateClient("PlatziFakeStore");
         var response = await client.GetAsync(_restApiSettings.Products);
-        response.EnsureSuccessStatusCode();
+        // response.EnsureSuccessStatusCode();
+        var body = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new UpstreamApiException(
+            (int)response.StatusCode,
+            body,
+            response.Content.Headers.ContentType?.ToString());
+        }
         var content = await response.Content.ReadAsStringAsync();
         var res = JsonSerializer.Deserialize<List<Product>>(content) ?? [];
         
@@ -31,7 +39,15 @@ public class ProductsService : IProductsService
         var client = _factory.CreateClient("PlatziFakeStore");
         var response = await client.GetAsync(
         $"{_restApiSettings.Products}/{id}");
-        response.EnsureSuccessStatusCode();
+        // response.EnsureSuccessStatusCode();
+        var body = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new UpstreamApiException(
+            (int)response.StatusCode,
+            body,
+            response.Content.Headers.ContentType?.ToString());
+        }
         var content = await response.Content.ReadAsStringAsync();
         var res = JsonSerializer.Deserialize<Product>(content);
         
@@ -41,13 +57,17 @@ public class ProductsService : IProductsService
     public async Task<Product> CreateProductAsync(CreateProductModel product)
     {
         var client = _factory.CreateClient("PlatziFakeStore");
-
         var response = await client.PostAsJsonAsync(_restApiSettings.Products,product);
-
-        response.EnsureSuccessStatusCode();
-
+        // response.EnsureSuccessStatusCode();
+        var body = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new UpstreamApiException(
+            (int)response.StatusCode,
+            body,
+            response.Content.Headers.ContentType?.ToString());
+        }
         var createdProduct = await response.Content.ReadFromJsonAsync<Product>();
-
         return createdProduct ?? throw new InvalidOperationException("The products API returned an empty response.");
     }
 }

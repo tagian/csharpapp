@@ -8,3 +8,4 @@ global using CSharpApp.Application.Categories.Commands.CreateCategory;
 global using CSharpApp.Application.Categories.Queries.GetCategories;
 global using CSharpApp.Application.Categories.Queries.GetCategoryById;
 global using CSharpApp.Application.Products.Commands.CreateProduct;
+global using CSharpApp.Api.Middleware;
