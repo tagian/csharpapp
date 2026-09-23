@@ -1,4 +1,6 @@
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 var logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
@@ -13,7 +15,7 @@ builder.Services.AddApiVersioning().AddApiExplorer(options =>
     options.GroupNameFormat = "'v'VVV";
     options.SubstituteApiVersionInUrl = true;
 });
-
+builder.Services.AddScoped<GetProductsQueryHandler>();
 
 var app = builder.Build();
 
@@ -30,10 +32,19 @@ if (app.Environment.IsDevelopment())
 
 var versionedEndpointRouteBuilder = app.NewVersionedApi();
 
-versionedEndpointRouteBuilder.MapGet("api/v{version:apiVersion}/getproducts", async (IProductsService productsService) =>
+// versionedEndpointRouteBuilder.MapGet("api/v{version:apiVersion}/getproducts", async (IProductsService productsService) =>
+//     {
+//         var products = await productsService.GetProducts();
+//         return products;
+//     })
+//     .WithName("GetProducts")
+//     .HasApiVersion(1.0);
+
+versionedEndpointRouteBuilder.MapGet("api/v{version:apiVersion}/getproducts", async (GetProductsQueryHandler handler) =>
     {
-        var products = await productsService.GetProducts();
-        return products;
+        var query = new GetProductsQuery();
+        var result = await handler.HandleAsync(query);
+        return result;
     })
     .WithName("GetProducts")
     .HasApiVersion(1.0);
