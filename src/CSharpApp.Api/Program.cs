@@ -5,7 +5,7 @@ var logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configurat
 builder.Logging.ClearProviders().AddSerilog(logger);
 
 builder.Services.AddOpenApi("v1");
-builder.Services.AddDefaultConfiguration();
+builder.Services.AddDefaultConfiguration(builder.Configuration);
 builder.Services.AddHttpConfiguration();
 builder.Services.AddProblemDetails();
 builder.Services.AddApiVersioning().AddApiExplorer(options =>
