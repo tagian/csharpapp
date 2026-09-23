@@ -1,10 +1,13 @@
 using CSharpApp.Application.Categories;
 using CSharpApp.Core.Interfaces;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
-var logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
-builder.Logging.ClearProviders().AddSerilog(logger);
+Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+
+builder.Logging.ClearProviders();
+builder.Services.AddSerilog(Log.Logger);
 
 builder.Services.AddOpenApi("v1");
 builder.Services.AddDefaultConfiguration(builder.Configuration);
@@ -27,6 +30,12 @@ builder.Services.AddScoped<CreateCategoryCommandHandler>();
 
 
 var app = builder.Build();
+
+app.UseSerilogRequestLogging(options =>
+{
+    options.MessageTemplate =
+        "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0} ms";
+});
 
 if (app.Environment.IsDevelopment())
 {
