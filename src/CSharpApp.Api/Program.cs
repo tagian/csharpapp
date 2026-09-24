@@ -123,3 +123,5 @@ versionedEndpointRouteBuilder.MapPost("api/v{version:apiVersion}/category", asyn
 
 
 app.Run();
+
+public partial class Program { }
