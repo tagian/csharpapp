@@ -1,6 +1,3 @@
-using CSharpApp.Core.Exceptions;
-using Microsoft.AspNetCore.Diagnostics;
-
 namespace CSharpApp.Api.Middleware;
 
 public sealed class UpstreamExceptionHandler : IExceptionHandler
