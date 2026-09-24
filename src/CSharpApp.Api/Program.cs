@@ -28,6 +28,9 @@ builder.Services.AddScoped<GetCategoriesQueryHandler>();
 builder.Services.AddScoped<GetCategoryByIdQueryHandler>();
 builder.Services.AddScoped<CreateCategoryCommandHandler>();
 
+builder.Services.AddSingleton<ITokenService, TokenService>();
+builder.Services.AddTransient<AuthHandler>();
+
 var app = builder.Build();
 
 app.UseSerilogRequestLogging(options =>
